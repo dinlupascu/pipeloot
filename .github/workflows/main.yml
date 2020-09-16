@@ -2,17 +2,17 @@
 # GitHub Action Workflow to Deploy Flask App to AWS ElasticBeanstalk
 #
 # Version      Date        Info
-# 1.0          2019        Initial Version
+# 1.0          2020        Initial Version
 #
-# Made by Denis Astahov ADV-IT Copyleft (c) 2019
+# Made by dlupascu (c) 2020
 #---------------------------------------------------------------------
-name: CI-CD-Pipeline-to-AWS-ElasticBeastalk
+name: zircon-exec-testing
 env:
-  EB_PACKAGE_S3_BUCKET_NAME : "adv-it-flask-application-packages"
-  EB_APPLICATION_NAME       : "MyFlask"
-  EB_ENVIRONMENT_NAME       : "MyFlask-env"
-  DEPLOY_PACKAGE_NAME       : "flask_app_${{ github.sha }}.zip"
-  AWS_REGION_NAME           : "us-west-2"
+  EB_PACKAGE_S3_BUCKET_NAME : "zircon-exec-packages"
+  EB_APPLICATION_NAME       : "zirconFlask"
+  EB_ENVIRONMENT_NAME       : "zirconFlask-env"
+  DEPLOY_PACKAGE_NAME       : "zircon_artifact_${{ github.sha }}.zip"
+  AWS_REGION_NAME           : "eu-central-1"
 
 on: 
   push:
@@ -20,7 +20,7 @@ on:
       - master
 
 jobs:
-  my_ci_part:
+  zircon-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,8 +33,8 @@ jobs:
     - name: Configure my AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id    :  ${{ secrets.MY_AWS_ACCESS_KEY }}
-        aws-secret-access-key:  ${{ secrets.MY_AWS_SECRET_KEY }}
+        aws-access-key-id    :  ${{ secrets.AWS_GIT_USER_ACCESS }}
+        aws-secret-access-key:  ${{ secrets.AWS_GIT_USER_SECRET }}
         aws-region           :  ${{ env.AWS_REGION_NAME }}
         
     - name: Copy Deployment package to S3 bucket
@@ -44,16 +44,16 @@ jobs:
       run : echo "CI Pipeline part Finished successfully!"
 
 
-  my_cd_part:
+  zircon-deploy:
     runs-on: ubuntu-latest
-    needs: [my_ci_part]
+    needs: [zircon-build]
 
     steps:
     - name: Configure my AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id    :  ${{ secrets.MY_AWS_ACCESS_KEY }}
-        aws-secret-access-key:  ${{ secrets.MY_AWS_SECRET_KEY }}
+        aws-access-key-id    :  ${{ secrets.AWS_GIT_USER_ACCESS }}
+        aws-secret-access-key:  ${{ secrets.AWS_GIT_USER_SECRET }}
         aws-region           :  ${{ env.AWS_REGION_NAME }}
     
     - name: Create new ElasticBeanstalk Application Version
