@@ -4,7 +4,7 @@
 
 
 Status of Last Deployment:<br>
-<img src="https://github.com/dlupsacu/pipeloot/workflows/zircon-exec-testing/badge.svg?branch=master"><br>
+<img src="https://github.com/dinlupsacu/pipeloot/workflows/zircon-exec-testing/badge.svg?branch=master"><br>
 
 
 #dlupsacu
